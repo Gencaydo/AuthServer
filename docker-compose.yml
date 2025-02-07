@@ -11,4 +11,3 @@ services:
     volumes:
       - ./logs:/app/logs # Optional: Bind mount for logging
     restart: unless-stopped
-    user: "${APP_UID}" # Ensure this matches the user in your Dockerfile
