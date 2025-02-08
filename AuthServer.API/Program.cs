@@ -89,6 +89,11 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080); // Listen on all interfaces
+});
+
 
 
 var app = builder.Build();
