@@ -94,6 +94,16 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(8080); // Listen on all interfaces
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("LocalhostPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Specify your localhost URL and port (e.g., React or Angular app)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 
 
 var app = builder.Build();
@@ -106,6 +116,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("LocalhostPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
