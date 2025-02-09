@@ -100,7 +100,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:4200") // Specify your localhost URL and port (e.g., React or Angular app)
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
