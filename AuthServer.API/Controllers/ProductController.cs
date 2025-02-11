@@ -8,8 +8,6 @@ namespace AuthServer.API.Controllers
 {
 
     [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
     public class ProductController : CustomBaseController
     {
         private readonly IServiceGeneric<Product, ProductDto> _productService;
