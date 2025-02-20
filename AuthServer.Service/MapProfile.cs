@@ -8,7 +8,6 @@ public class MapProfile : Profile
 
     public MapProfile()
     {
-        CreateMap<Product, ProductDto>().ReverseMap();
         CreateMap<UserApp, UserAppDto>().ReverseMap();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace AuthServer.Core.Models;
 
-public class UserApp : IdentityUser<string>
+public class UserApp : IdentityUser
 {
 
 }

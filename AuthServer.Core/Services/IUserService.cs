@@ -7,7 +7,7 @@ public interface IUserService
 {
     Task<Response<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto);
 
-    Task<Response<UserAppDto>> GetUserByNameAsync(string name);
+    Task<Response<UserAppDto>> GetUserByEmailAsync(string name);
 
     Task<Response<NoDataDto>> CreateUserRoles(string email);
 }

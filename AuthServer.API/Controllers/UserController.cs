@@ -24,9 +24,9 @@ namespace AuthServer.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUser()
+        public async Task<IActionResult> GetUser(string email)
         {
-            return ActionResultInstance(await _userService.GetUserByNameAsync(HttpContext.User.Identity.Name));
+            return ActionResultInstance(await _userService.GetUserByEmailAsync(email));
         }
 
 

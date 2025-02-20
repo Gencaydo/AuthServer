@@ -89,10 +89,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(8085); // Listen on all interfaces
-});
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    options.ListenAnyIP(8085); // Listen on all interfaces
+//});
 
 builder.Services.AddCors(options =>
 {
