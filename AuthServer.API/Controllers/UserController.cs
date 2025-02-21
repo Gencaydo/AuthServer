@@ -23,6 +23,13 @@ namespace AuthServer.API.Controllers
             return ActionResultInstance(result);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(UpdateUserDto updateUserDto)
+        {
+            var result = await _userService.UpdateUserAsync(updateUserDto);
+            return ActionResultInstance(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetUser(string email)
         {

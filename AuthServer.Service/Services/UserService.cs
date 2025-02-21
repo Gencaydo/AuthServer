@@ -40,6 +40,26 @@ public class UserService : IUserService
         return Response<UserAppDto>.Success(userDto, 200);
     }
 
+    public async Task<Response<UserAppDto>> UpdateUserAsync(UpdateUserDto updateUserDto)
+    {
+        var user = new UserApp()
+        {
+            Id = updateUserDto.Id
+        };
+
+        var result = await _userManager.UpdateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            var errors = result.Errors.Select(x => x.Description).ToList();
+            return Response<UserAppDto>.Fail(new ErrorDto(errors, true), 404);
+        }
+
+        var userDto = ObjectMapper.Mapper.Map<UserAppDto>(user);
+
+        return Response<UserAppDto>.Success(userDto, 200);
+    }
+
     public async Task<Response<UserAppDto>> GetUserByEmailAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
