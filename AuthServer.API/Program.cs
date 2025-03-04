@@ -21,7 +21,7 @@ builder.Services.AddIdentityServices(builder.Configuration);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(8080); // Listen on all interfaces
+    options.ListenAnyIP(8085); // Listen on all interfaces
 });
 
 var app = builder.Build();
