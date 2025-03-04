@@ -25,7 +25,7 @@ builder.Services.AddValidation();
 // Configure Identity and Authentication
 builder.Services.AddIdentityServices(builder.Configuration);
 
-if (builder.Environment.IsProduction())
+if (builder.Environment.IsDevelopment())
 {
     builder.WebHost.ConfigureKestrel(options =>
     {

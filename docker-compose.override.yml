@@ -3,7 +3,5 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8085
-      - ASPNETCORE_HTTPS_PORTS=8086
     ports:
       - "8085"
-      - "8086"
