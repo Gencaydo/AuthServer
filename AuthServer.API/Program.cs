@@ -1,4 +1,5 @@
 using AuthServer.API.Extensions;
+using AuthServer.Core.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,11 @@ builder.Services.AddValidation();
 // Configure Identity and Authentication
 builder.Services.AddIdentityServices(builder.Configuration);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080); // Listen on all interfaces
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +39,7 @@ app.UseCors("LocalhostPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.MapControllers();
 

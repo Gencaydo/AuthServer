@@ -6,7 +6,7 @@
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("DefaultPolicy", policy =>
+                options.AddPolicy("LocalhostPolicy", policy =>
                 {
                     policy.WithOrigins("http://angulartest.gencaydoyurucu.com.tr", "http://localhost:4200")
                           .AllowAnyHeader()
