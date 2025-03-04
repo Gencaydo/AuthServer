@@ -7,6 +7,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Configuration.AddJsonFile(
+        $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+        optional: false,
+        reloadOnChange: true
+     ).AddEnvironmentVariables();
+
 // Configure application services
 builder.Services.AddApplicationServices(builder.Configuration);
 
@@ -19,10 +25,13 @@ builder.Services.AddValidation();
 // Configure Identity and Authentication
 builder.Services.AddIdentityServices(builder.Configuration);
 
-builder.WebHost.ConfigureKestrel(options =>
+if (builder.Environment.IsProduction())
 {
-    options.ListenAnyIP(8085); // Listen on all interfaces
-});
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenAnyIP(8085); // Listen on all interfaces
+    });
+}
 
 var app = builder.Build();
 

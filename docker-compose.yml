@@ -6,5 +6,5 @@ services:
     ports:
       - "8085:8085"
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: Development
     restart: unless-stopped
