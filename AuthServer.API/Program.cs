@@ -25,13 +25,11 @@ builder.Services.AddValidation();
 // Configure Identity and Authentication
 builder.Services.AddIdentityServices(builder.Configuration);
 
-if (builder.Environment.IsDevelopment())
+
+builder.WebHost.ConfigureKestrel(options =>
 {
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenAnyIP(8085); // Listen on all interfaces
-    });
-}
+    options.ListenAnyIP(8085); // Listen on all interfaces
+});
 
 var app = builder.Build();
 
