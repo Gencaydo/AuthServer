@@ -1,5 +1,6 @@
 ﻿using AuthServer.Core.Dtos;
 using AuthServer.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthServer.API.Controllers
@@ -30,6 +31,7 @@ namespace AuthServer.API.Controllers
             return ActionResultInstance(result);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUser(string email)
         {
