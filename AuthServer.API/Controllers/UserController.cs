@@ -24,6 +24,7 @@ namespace AuthServer.API.Controllers
             return ActionResultInstance(result);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut]
         public async Task<IActionResult> UpdateUser(UpdateUserDto updateUserDto)
         {
