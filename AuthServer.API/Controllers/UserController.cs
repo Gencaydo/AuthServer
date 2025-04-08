@@ -31,11 +31,11 @@ namespace AuthServer.API.Controllers
             return ActionResultInstance(result);
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> GetUser(string email)
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost]
+        public async Task<IActionResult> GetUserByEmail(GetUserDto getUserDto)
         {
-            return ActionResultInstance(await _userService.GetUserByEmailAsync(email));
+            return ActionResultInstance(await _userService.GetUserByEmailAsync(getUserDto));
         }
 
 

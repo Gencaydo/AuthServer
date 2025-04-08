@@ -60,9 +60,9 @@ public class UserService : IUserService
         return Response<UserAppDto>.Success(userDto, 200);
     }
 
-    public async Task<Response<UserAppDto>> GetUserByEmailAsync(string email)
+    public async Task<Response<UserAppDto>> GetUserByEmailAsync(GetUserDto getUserDto)
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await _userManager.FindByEmailAsync(getUserDto.Email);
         if (user is null)
         {
             return Response<UserAppDto>.Fail("user not found", 404, true);
