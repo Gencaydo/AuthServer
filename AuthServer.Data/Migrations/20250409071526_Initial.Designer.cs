@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthServer.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250408103805_Initial")]
+    [Migration("20250409071526_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -44,7 +44,7 @@ namespace AuthServer.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FistName")
+                    b.Property<string>("FirstName")
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")

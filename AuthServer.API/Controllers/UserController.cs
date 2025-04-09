@@ -26,9 +26,9 @@ namespace AuthServer.API.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UpdateUserDto updateUserDto)
+        public async Task<IActionResult> UpdateUser(UserAppDto userAppDto)
         {
-            var result = await _userService.UpdateUserAsync(updateUserDto);
+            var result = await _userService.UpdateUserAsync(userAppDto);
             return ActionResultInstance(result);
         }
 

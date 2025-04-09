@@ -40,12 +40,15 @@ public class UserService : IUserService
         return Response<UserAppDto>.Success(userDto, 200);
     }
 
-    public async Task<Response<UserAppDto>> UpdateUserAsync(UpdateUserDto updateUserDto)
+    public async Task<Response<UserAppDto>> UpdateUserAsync(UserAppDto userAppDto)
     {
-        var user = new UserApp()
-        {
-            Id = updateUserDto.Id
-        };
+        var user = await _userManager.FindByIdAsync(userAppDto.Id);
+
+
+        user.FirstName = userAppDto.FirstName;
+        user.LastName = userAppDto.LastName;
+        user.MobilePhoneNumber = userAppDto.MobilePhoneNumber;
+
 
         var result = await _userManager.UpdateAsync(user);
 

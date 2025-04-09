@@ -23,7 +23,7 @@ namespace AuthServer.API.Extensions
             .AddDefaultTokenProviders();
 
             services.Configure<CustomTokenOption>(configuration.GetSection("TokenOptions"));
-            services.Configure<List<Client>>(configuration.GetSection("Clients"));
+            //services.Configure<List<Client>>(configuration.GetSection("Clients"));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>

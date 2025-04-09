@@ -41,7 +41,7 @@ namespace AuthServer.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FistName")
+                    b.Property<string>("FirstName")
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
