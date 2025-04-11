@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using AuthServer.Core.Configuration;
 using AuthServer.Core.Dtos;
 using AuthServer.Core.Models;
@@ -27,12 +28,14 @@ public class TokenService : ITokenService
 
     private string CreateRefreshToken()
     {
-        var numberByte = new Byte[32];
-
+        // Generate a random 32-byte refresh token
+        var numberByte = new byte[32];
         using var rnd = RandomNumberGenerator.Create();
         rnd.GetBytes(numberByte);
+        var refreshToken = Convert.ToBase64String(numberByte);
 
-        return Convert.ToBase64String(numberByte);
+        // Encrypt the refresh token
+        return EncryptToken(refreshToken);
     }
 
     //Buradaki claimler payloadda gözükecek.    
@@ -85,7 +88,7 @@ public class TokenService : ITokenService
 
         var tokenDto = new TokenDto()
         {
-            AccessToken = token,
+            AccessToken = EncryptToken(token),
             RefreshToken = CreateRefreshToken(),
             AccessTokenExpiration = accessTokenExpiration,
             RefreshTokenExpiration = refreshTokenExpiration
@@ -118,6 +121,21 @@ public class TokenService : ITokenService
         };
 
         return clientTokenDto;
+    }
+
+    private string EncryptToken(string token)
+    {
+        var key = Encoding.UTF8.GetBytes("YourStrongEncryptionKey123"); // 32 characters for AES-256
+        using var aes = Aes.Create();
+        aes.Key = key;
+        aes.GenerateIV();
+        var iv = Convert.ToBase64String(aes.IV);
+
+        using var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+        var tokenBytes = Encoding.UTF8.GetBytes(token);
+        var encryptedBytes = encryptor.TransformFinalBlock(tokenBytes, 0, tokenBytes.Length);
+
+        return $"{iv}:{Convert.ToBase64String(encryptedBytes)}";
     }
 }
 
