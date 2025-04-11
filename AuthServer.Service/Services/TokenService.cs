@@ -125,7 +125,7 @@ public class TokenService : ITokenService
 
     private string EncryptToken(string token)
     {
-        var key = Encoding.UTF8.GetBytes("YourStrongEncryptionKey123"); // 32 characters for AES-256
+        var key = Encoding.UTF8.GetBytes("doyouwannacreateaspecialky190219");
         using var aes = Aes.Create();
         aes.Key = key;
         aes.GenerateIV();
