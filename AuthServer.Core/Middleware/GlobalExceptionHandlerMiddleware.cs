@@ -1,68 +1,55 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Net;
-using System.Net.Sockets;
+﻿using System.Net;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+using StackExchange.Redis;
 
 namespace AuthServer.Core.Middleware
 {
     public class GlobalExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
+        private readonly IConnectionMultiplexer _redis;
 
-        public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
+        public GlobalExceptionHandlerMiddleware(RequestDelegate next, IConnectionMultiplexer redis)
         {
             _next = next;
-            _logger = logger;
+            _redis = redis;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _next(httpContext); // Continue processing the request
+                await _next(context);
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(httpContext, ex); // Handle any unhandled exceptions
+                await HandleExceptionAsync(context, ex);
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            _logger.LogError(exception, "An unexpected error occurred.");
+            var response = context.Response;
+            response.ContentType = "application/json";
+            response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            // Default to InternalServerError
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-            // Base case for Status Codes and Messages
-            var errorResponse = new
+            var errorDetails = new
             {
-                Code = context.Response.StatusCode, // HTTP status code
-                Message = GetMessageForStatusCode(context.Response.StatusCode) // Dynamic message based on status code
+                StatusCode = response.StatusCode,
+                Message = "An unexpected error occurred. Please try again later.",
+                Detailed = exception.Message,
+                Timestamp = DateTime.UtcNow
             };
 
-            // Return the error response as JSON
-            return context.Response.WriteAsync(JsonConvert.SerializeObject(errorResponse));
-        }
+            // Fix for CS1501 and CS0815: Use System.Text.Json.JsonSerializer.Serialize with the correct overload
+            var errorJson = JsonSerializer.Serialize(errorDetails);
 
-        // Helper method to return a message based on the status code
-        private string GetMessageForStatusCode(int statusCode)
-        {
-            return statusCode switch
-            {
-                (int)HttpStatusCode.BadRequest => "The request could not be understood by the server due to malformed syntax.",
-                (int)HttpStatusCode.Unauthorized => "The request requires user authentication.",
-                (int)HttpStatusCode.Forbidden => "The server understood the request, but it refuses to authorize it.",
-                (int)HttpStatusCode.NotFound => "The server has not found anything matching the request URI.",
-                (int)HttpStatusCode.MethodNotAllowed => "The method specified in the request is not allowed for the resource identified by the request URI.",
-                (int)HttpStatusCode.RequestTimeout => "The server timed out waiting for the request.",
-                (int)HttpStatusCode.InternalServerError => "The server encountered an internal error and was unable to complete the request.",
-                (int)HttpStatusCode.ServiceUnavailable => "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server.",
-                _ => "An unexpected error occurred. Please try again later." // Default case for unhandled status codes
-            };
+            var db = _redis.GetDatabase();
+            var logKey = $"error:log:{Guid.NewGuid()}";
+            await db.StringSetAsync(logKey, errorJson);
+
+            await response.WriteAsync(errorJson);
         }
     }
 }
