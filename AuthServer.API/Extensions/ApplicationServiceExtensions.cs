@@ -7,6 +7,7 @@ using AuthServer.Data;
 using AuthServer.Service.Services;
 using AuthServer.Service;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace AuthServer.API.Extensions
 {
@@ -34,6 +35,17 @@ namespace AuthServer.API.Extensions
                 {
                     sqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
                 });
+            });
+
+            services.AddSingleton<IConnectionMultiplexer>(sp =>
+            {
+                var redisConnection = configuration.GetConnectionString("Redis");
+                if (string.IsNullOrWhiteSpace(redisConnection))
+                {
+                    throw new InvalidOperationException("Redis connection string is not configured.");
+                }
+
+                return ConnectionMultiplexer.Connect(redisConnection);
             });
 
             return services;
