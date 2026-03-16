@@ -1,4 +1,4 @@
-﻿using AuthServer.Core.Repositories;
+using AuthServer.Core.Repositories;
 using AuthServer.Core.Services;
 using AuthServer.Core.UnitOfWork;
 using AuthServer.Data.Repositories;
@@ -15,7 +15,7 @@ namespace AuthServer.API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAutoMapper(typeof(MapProfile));
+            services.AddAutoMapper(cfg => cfg.AddProfile<MapProfile>());
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();

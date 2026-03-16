@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AuthServer.Service;
 
@@ -6,10 +7,9 @@ public static class ObjectMapper
 {
     private static readonly Lazy<IMapper> lazy = new Lazy<IMapper>(() =>
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<MapProfile>();
-        });
+        var expression = new MapperConfigurationExpression();
+        expression.AddProfile<MapProfile>();
+        var config = new MapperConfiguration(expression, NullLoggerFactory.Instance);
         return config.CreateMapper();
     });
 
