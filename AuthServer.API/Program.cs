@@ -7,12 +7,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Configuration.AddJsonFile(
-        $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
-        optional: false,
-        reloadOnChange: true
-     ).AddEnvironmentVariables();
-
 // Configure application services
 builder.Services.AddApplicationServices(builder.Configuration);
 
