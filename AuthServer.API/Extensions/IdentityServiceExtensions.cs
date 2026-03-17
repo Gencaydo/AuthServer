@@ -1,4 +1,4 @@
-﻿using AuthServer.Core.Configuration;
+using AuthServer.Core.Configuration;
 using AuthServer.Core.Models;
 using AuthServer.Data;
 using AuthServer.Service.Services;
@@ -39,6 +39,24 @@ namespace AuthServer.API.Extensions
                         ValidateIssuer = true,
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero
+                    };
+
+                    opts.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var encryptedToken = context.Request.Headers["Authorization"]
+                                .ToString()
+                                .Replace("Bearer ", string.Empty)
+                                .Trim();
+
+                            if (!string.IsNullOrEmpty(encryptedToken) && encryptedToken.Contains(':'))
+                            {
+                                context.Token = SignInService.DecryptToken(encryptedToken, tokenOptions.EncryptionKey!);
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

@@ -116,7 +116,7 @@ public class TokenService : ITokenService
         var token = handler.WriteToken(jwtSecurityToken);
         var clientTokenDto = new ClientTokenDto()
         {
-            AccessToken = token,
+            AccessToken = EncryptToken(token),
             AccessTokenExpiration = accessTokenExpiration,
         };
 
