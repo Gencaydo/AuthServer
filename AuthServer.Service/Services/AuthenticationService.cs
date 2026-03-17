@@ -1,4 +1,4 @@
-﻿using AuthServer.Core.Configuration;
+using AuthServer.Core.Configuration;
 using AuthServer.Core.Dtos;
 using AuthServer.Core.Models;
 using AuthServer.Core.Repositories;
@@ -61,12 +61,12 @@ public class AuthenticationService : IAuthenticationService
         if (userRefreshToken is null)
         {
             await _userRefreshRepository.AddAsync(new UserRefreshToken()
-                { UserId = user.Id, Code = token.RefreshToken, Expiration = token.RefreshTokenExpiration });
+                { UserId = user.Id, Code = token.RefreshToken, Expiration = token.RefreshTokenExpiration.ToUniversalTime() });
         }
         else
         {
             userRefreshToken.Code = token.RefreshToken;
-            userRefreshToken.Expiration = token.RefreshTokenExpiration;
+            userRefreshToken.Expiration = token.RefreshTokenExpiration.ToUniversalTime();
         }
         await _unitOfWork.SaveChangesAsync();
 
@@ -93,7 +93,7 @@ public class AuthenticationService : IAuthenticationService
         var tokenDto = _tokenService.CreateToken(user);
 
         existRefreshToken.Code = tokenDto.RefreshToken;
-        existRefreshToken.Expiration = tokenDto.RefreshTokenExpiration;
+        existRefreshToken.Expiration = tokenDto.RefreshTokenExpiration.ToUniversalTime();
 
         await _unitOfWork.SaveChangesAsync();
 

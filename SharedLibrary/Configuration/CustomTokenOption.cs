@@ -1,4 +1,4 @@
-﻿namespace SharedLibrary.Configuration;
+namespace SharedLibrary.Configuration;
 public class CustomTokenOption
 {
     public List<string>? Audience { get; set; }
@@ -6,5 +6,6 @@ public class CustomTokenOption
     public int AccessTokenExpiration { get; set; }
     public int RefreshTokenExpiration { get; set; }
     public string? SecurityKey { get; set; }
+    public string? EncryptionKey { get; set; }
 }
 

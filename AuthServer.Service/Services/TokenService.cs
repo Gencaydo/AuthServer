@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -90,8 +90,8 @@ public class TokenService : ITokenService
         {
             AccessToken = EncryptToken(token),
             RefreshToken = CreateRefreshToken(),
-            AccessTokenExpiration = accessTokenExpiration,
-            RefreshTokenExpiration = refreshTokenExpiration
+            AccessTokenExpiration = accessTokenExpiration.ToLocalTime(),
+            RefreshTokenExpiration = refreshTokenExpiration.ToLocalTime()
         };
 
         return tokenDto;
@@ -125,7 +125,7 @@ public class TokenService : ITokenService
 
     private string EncryptToken(string token)
     {
-        var key = Encoding.UTF8.GetBytes("doyouwannacreateaspecialky190219");
+        var key = Encoding.UTF8.GetBytes(_tokenOption.EncryptionKey!);
         using var aes = Aes.Create();
         aes.Key = key;
         aes.GenerateIV();
