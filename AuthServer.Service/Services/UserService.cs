@@ -24,7 +24,10 @@ public class UserService : IUserService
         {
             Id = Guid.NewGuid().ToString(),
             Email = createUserDto.Email,
-            UserName = createUserDto.UserName
+            UserName = createUserDto.UserName,
+            FirstName = createUserDto.FirstName,
+            LastName = createUserDto.LastName,
+            MobilePhoneNumber = createUserDto.MobilePhoneNumber
         };
 
         var result = await _userManager.CreateAsync(user, password: createUserDto.Password);
