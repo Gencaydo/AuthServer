@@ -44,14 +44,14 @@ public class AuthenticationService : IAuthenticationService
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
         if (user is null)
         {
-            return Response<TokenDto>.Fail("Email or Password is wrong!", 404, true);
+            return Response<TokenDto>.Fail("Email or Password is wrong!", 401, true);
         }
 
         var isPasswordCheck = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
         if (!isPasswordCheck)
         {
-            return Response<TokenDto>.Fail("Email or Password is wrong!", 404, true);
+            return Response<TokenDto>.Fail("Email or Password is wrong!", 401, true);
         }
 
         var token = _tokenService.CreateToken(user);
@@ -112,7 +112,7 @@ public class AuthenticationService : IAuthenticationService
         _userRefreshRepository.Remove(existRefreshToken);
         await _unitOfWork.SaveChangesAsync();
 
-        return Response<NoDataDto>.Success(200);
+        return Response<NoDataDto>.Success(204);
     }
 
     public async Task<Response<ClientTokenDto>> CreateTokenByClient(ClientLoginDto clientLoginDto)
@@ -120,9 +120,9 @@ public class AuthenticationService : IAuthenticationService
         var client = _clients.SingleOrDefault(x =>
             x.ClientId == clientLoginDto.ClientId && x.Secret == clientLoginDto.ClientSecret);
 
-        if (clientLoginDto is null)
+        if (client is null)
         {
-            return Response<ClientTokenDto>.Fail("ClientID or Secret not found", 404, true);
+            return Response<ClientTokenDto>.Fail("ClientID or Secret not found", 401, true);
         }
 
         var token = _tokenService.CreateTokenByClient(client);

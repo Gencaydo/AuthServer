@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.X509Certificates;
 using AuthServer.Core.Dtos;
 using AuthServer.Core.Models;
 using AuthServer.Core.Services;
@@ -32,12 +32,12 @@ public class UserService : IUserService
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(x => x.Description).ToList();
-            return Response<UserAppDto>.Fail(new ErrorDto(errors, true), 404);
+            return Response<UserAppDto>.Fail(new ErrorDto(errors, true), 400);
         }
 
         var userDto = ObjectMapper.Mapper.Map<UserAppDto>(user);
 
-        return Response<UserAppDto>.Success(userDto, 200);
+        return Response<UserAppDto>.Success(userDto, 201);
     }
 
     public async Task<Response<UserAppDto>> UpdateUserAsync(UserAppDto userAppDto)
@@ -55,7 +55,7 @@ public class UserService : IUserService
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(x => x.Description).ToList();
-            return Response<UserAppDto>.Fail(new ErrorDto(errors, true), 404);
+            return Response<UserAppDto>.Fail(new ErrorDto(errors, true), 400);
         }
 
         var userDto = ObjectMapper.Mapper.Map<UserAppDto>(user);
@@ -77,7 +77,7 @@ public class UserService : IUserService
 
     public async Task<Response<NoDataDto>> CreateUserRoles(string email)
     {
-        if ((await _roleManager.RoleExistsAsync("admin")))
+        if (!(await _roleManager.RoleExistsAsync("admin")))
         {
             await _roleManager.CreateAsync(new IdentityRole("admin"));
             await _roleManager.CreateAsync(new IdentityRole("manager"));

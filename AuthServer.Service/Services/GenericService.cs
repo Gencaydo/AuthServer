@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Net;
 using AuthServer.Core.Repositories;
 using AuthServer.Core.Services;
@@ -23,10 +23,15 @@ public class GenericService<T, TDto> : IServiceGeneric<T,TDto> where TDto : clas
     public async Task<Response<TDto>> GetByIdAsync(int id)
     {
         var entity = await _genericRepository.GetByIdAsync(id);
+
+        if (entity is null)
+        {
+            return Response<TDto>.Fail("Entity not found", 404, true);
+        }
+
         var entityDto = ObjectMapper.Mapper.Map<TDto>(entity);
 
-
-        return Response<TDto>.Success(entityDto,200);
+        return Response<TDto>.Success(entityDto, 200);
     }
 
     public async Task<Response<IEnumerable<TDto>>> GetAllAsync()
@@ -63,7 +68,7 @@ public class GenericService<T, TDto> : IServiceGeneric<T,TDto> where TDto : clas
 
         var newDto = ObjectMapper.Mapper.Map<TDto>(newEntity);
         
-        return Response<TDto>.Success(newDto, 200);
+        return Response<TDto>.Success(newDto, 201);
     }
 
     public async Task<Response<NoDataDto>> Remove(int id)

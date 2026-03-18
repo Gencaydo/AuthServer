@@ -1,6 +1,7 @@
-﻿using System.Net;
+using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
+using SharedLibrary.Dtos;
 using StackExchange.Redis;
 
 namespace AuthServer.Core.Middleware
@@ -34,16 +35,10 @@ namespace AuthServer.Core.Middleware
             response.ContentType = "application/json";
             response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            var errorDetails = new
-            {
-                StatusCode = response.StatusCode,
-                Message = "An unexpected error occurred. Please try again later.",
-                Detailed = exception.Message,
-                Timestamp = DateTime.UtcNow
-            };
+            var errorResponse = Response<NoDataDto>.Fail(
+                "An unexpected error occurred. Please try again later.", 500, true);
 
-            // Fix for CS1501 and CS0815: Use System.Text.Json.JsonSerializer.Serialize with the correct overload
-            var errorJson = JsonSerializer.Serialize(errorDetails);
+            var errorJson = JsonSerializer.Serialize(errorResponse);
 
             var db = _redis.GetDatabase();
             var logKey = $"error:log:{Guid.NewGuid()}";

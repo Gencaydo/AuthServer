@@ -1,4 +1,4 @@
-﻿using AuthServer.Core.Dtos;
+using AuthServer.Core.Dtos;
 using AuthServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,8 +33,8 @@ namespace AuthServer.API.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPost]
-        public async Task<IActionResult> GetUserByEmail(GetUserDto getUserDto)
+        [HttpGet]
+        public async Task<IActionResult> GetUserByEmail([FromQuery] GetUserDto getUserDto)
         {
             return ActionResultInstance(await _userService.GetUserByEmailAsync(getUserDto));
         }
@@ -43,8 +43,8 @@ namespace AuthServer.API.Controllers
         [HttpPost("CreateUserRoles/{email}")]
         public async Task<IActionResult> CreateUserRoles(string email)
         {
-            await _userService.CreateUserRoles(email);
-            return Ok();
+            var result = await _userService.CreateUserRoles(email);
+            return ActionResultInstance(result);
         }
     }
 }
