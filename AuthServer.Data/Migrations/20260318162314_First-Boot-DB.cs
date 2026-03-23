@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthServer.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class FistBootDB : Migration
+    public partial class FirstBootDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -18,6 +18,7 @@ namespace AuthServer.API.Extensions
             services.AddAutoMapper(cfg => cfg.AddProfile<MapProfile>());
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped(typeof(IServiceGeneric<,>), typeof(GenericService<,>));

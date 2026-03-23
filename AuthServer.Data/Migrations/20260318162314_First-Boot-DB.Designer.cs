@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthServer.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260316141652_Fist-Boot-DB")]
-    partial class FistBootDB
+    [Migration("20260318162314_First-Boot-DB")]
+    partial class FirstBootDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
